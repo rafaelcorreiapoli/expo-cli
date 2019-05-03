@@ -13,10 +13,12 @@ async function selectDistributionCert(context, options = {}) {
   const certificates = context.username
     ? await Credentials.Ios.getExistingDistCerts(context.username, context.team.id)
     : [];
-  const choices = [{ name: '[Upload an existing certificate]', value: 'UPLOAD' }, ...certificates];
+  const choices = [...certificates];
   if (!options.disableCreate) {
-    choices.unshift({ name: '[Create a new certificate]', value: 'GENERATE' });
+    choices.push({ name: '[Create a new certificate]', value: 'GENERATE' });
   }
+  choices.push({ name: '[Upload an existing certificate]', value: 'UPLOAD' });
+
   let { distributionCert } = await prompt({
     type: 'list',
     name: 'distributionCert',
